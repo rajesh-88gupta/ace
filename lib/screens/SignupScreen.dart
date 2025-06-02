@@ -212,9 +212,16 @@ class AuthController extends GetxController {
     isLoading.value = true;
 
     final response = await ApiService.register(
-      fullName: fullNameController.text,
+      name: fullNameController.text,
       email: emailController.text,
       password: passwordController.text,
+      role: "role",
+      phone: "",
+      password2: "",
+      city: "",
+      province: "",
+      gender: "",
+      photoDocument: "file", userId: ''
     );
 
     isLoading.value = false;

@@ -13,18 +13,36 @@ class ApiConstants {
 class ApiService {
   // Register a new user
   static Future<Map<String, dynamic>> register({
+    required String userId,
     required String email,
+    required String name,
+    required String role,
     required String password,
-    required String fullName,
+    required String password2,
+    required String phone,
+    required String city,
+    required String province,
+    required String gender,
+    required String photoDocument, // this will be sent in header
   }) async {
     try {
       final response = await http.post(
         Uri.parse(ApiConstants.register),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'photo_document': photoDocument, // Custom header
+        },
         body: jsonEncode({
-          'email': email,
-          'password': password,
-          'fullName': fullName,
+          "user_id": userId,
+          "email": email,
+          "name": name,
+          "role": role,
+          "password": password,
+          "password2": password2,
+          "phone": phone,
+          "city": city,
+          "province": province,
+          "gender": gender,
         }),
       );
 

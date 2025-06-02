@@ -1,4 +1,8 @@
+import 'package:ace/screens/HomeScreen.dart';
+import 'package:ace/screens/ResetPassword.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart' show Get;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,6 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoginSuccessful = true;
         userIdBorderColor = Colors.green;
         passwordBorderColor = Colors.green;
+        Get.to(()=>HomeScreen());
+
       } else {
         isLoginSuccessful = false;
         userIdBorderColor = Colors.red;
@@ -164,9 +170,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: validateLogin,
-                      child: Text(
-                        "Log In",
-                        style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                      child: InkWell(
+                        onTap: (){
+                        },
+
+                        child: Text(
+                          "Log In",
+                          style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -196,9 +207,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                       ),
-                      Text(
-                        "Forgot Password?",
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.purple),
+                      InkWell(
+                        onTap: (){
+                           Get.to(()=>ResetPasswordScreen());
+                        },
+
+                        child: Text(
+                          "Forgot Password?",
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.purple),
+                        ),
                       ),
                     ],
                   ),

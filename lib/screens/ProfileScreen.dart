@@ -1,163 +1,188 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+void main() => runApp(ProfileApp());
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController =
-  TextEditingController(text: '9689566856');
-  final TextEditingController _dobController = TextEditingController();
-
-  DateTime? selectedDate;
-
-  Future<void> _pickDate() async {
-    DateTime? date = await showDatePicker(
-      context: context,
-      initialDate: selectedDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (date != null) {
-      setState(() {
-        selectedDate = date;
-        _dobController.text = DateFormat('dd/MM/yyyy').format(date);
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    _dobController.dispose();
-    super.dispose();
-  }
+class ProfileApp extends StatelessWidget {
+  const ProfileApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ProfilePage(),
+    );
+  }
+}
+
+class ProfilePage extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+
+  ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
+      body: Stack(
         children: [
+          // Purple background
           Container(
-            padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
-            decoration: const BoxDecoration(
+            height: 750,
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF7F00FF), Color(0xFFE100FF)],
+                colors: [Colors.deepPurple, Colors.purple],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(40),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
             ),
-            child: Column(
-              children: [
-                Row(
-                  children: const [
-                    Icon(Icons.arrow_back, color: Colors.white),
-                    SizedBox(width: 10),
+          ),
+
+          // White form card
+          Positioned(
+            top: 150,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: EdgeInsets.fromLTRB(20, 70, 20, 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
                     Text(
-                      'Profile',
+                      'Puch Putichai',
                       style: TextStyle(
                         fontSize: 20,
-                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    CustomInputField(
+                      label: 'Full Name',
+                      icon: Icons.person_outline,
+                      controller: nameController,
+                    ),
+                    CustomInputField(
+                      label: 'Email',
+                      icon: Icons.email_outlined,
+                      controller: emailController,
+                    ),
+                    CustomInputField(
+                      label: 'Phone',
+                      icon: Icons.phone_outlined,
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                    ),
+                    CustomInputField(
+                      label: 'Date of Birth',
+                      icon: Icons.calendar_today,
+                      controller: dobController,
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime(2100),
+                        );
+                        if (pickedDate != null) {
+                          dobController.text =
+                          "${pickedDate.day.toString().padLeft(2, '0')}/${pickedDate.month.toString().padLeft(2, '0')}/${pickedDate.year}";
+                        }
+                      },
+                    ),
+                    SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        onPressed: () {
+                          // Confirm action
+                        },
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(fontSize: 18,color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundImage: NetworkImage(
-                    'https://your-image-url.com/photo.jpg', // Replace with actual image URL
-                  ),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Puch Putichai',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
           ),
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              children: [
-                _buildTextField(
-                    controller: _nameController,
-                    label: 'Full Name',
-                    icon: Icons.person),
-                const SizedBox(height: 16),
-                _buildTextField(
-                    controller: _emailController,
-                    label: 'Email',
-                    icon: Icons.email),
-                const SizedBox(height: 16),
-                _buildTextField(
-                    controller: _phoneController,
-                    label: 'Phone',
-                    icon: Icons.phone),
-                const SizedBox(height: 16),
-                GestureDetector(
-                  onTap: _pickDate,
-                  child: AbsorbPointer(
-                    child: _buildTextField(
-                      controller: _dobController,
-                      label: 'Date Of Birth',
-                      icon: Icons.calendar_today,
-                    ),
-                  ),
+
+          // Profile Image (centered and overlapping)
+          Positioned(
+            top: 100,
+            left: screenWidth / 2 - 60,
+            child: CircleAvatar(
+              radius: 60,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                radius: 55,
+                backgroundImage: NetworkImage(
+                  'https://i.imgur.com/BoN9kdC.png',
                 ),
-                const SizedBox(height: 30),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF7F00FF),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                    onPressed: () {
-                      // Handle confirm action
-                    },
-                    child: const Text(
-                      'Confirm',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildTextField(
-      {required TextEditingController controller,
-        required String label,
-        required IconData icon}) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon),
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+class CustomInputField extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final TextEditingController controller;
+  final TextInputType keyboardType;
+  final bool readOnly;
+  final VoidCallback? onTap;
+
+  const CustomInputField({
+    required this.label,
+    required this.icon,
+    required this.controller,
+    this.keyboardType = TextInputType.text,
+    this.readOnly = false,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: TextField(
+        controller: controller,
+        keyboardType: keyboardType,
+        readOnly: readOnly,
+        onTap: onTap,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon),
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
       ),
     );
   }
