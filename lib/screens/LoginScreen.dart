@@ -1,8 +1,8 @@
 import 'package:ace/screens/HomeScreen.dart';
 import 'package:ace/screens/ResetPassword.dart';
+import 'package:ace/screens/SignupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart' show Get;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,7 +13,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool rememberMe = false;
-  bool agreeTerms = false;
   bool isLoginSuccessful = false;
   bool isLoginAttempted = false;
 
@@ -26,14 +25,11 @@ class _LoginScreenState extends State<LoginScreen> {
   void validateLogin() {
     setState(() {
       isLoginAttempted = true;
-
-      // Dummy login validation (Replace with actual logic)
       if (userIdController.text == "admin" && passwordController.text == "1234") {
         isLoginSuccessful = true;
         userIdBorderColor = Colors.green;
         passwordBorderColor = Colors.green;
-        Get.to(()=>HomeScreen());
-
+        Get.to(() => HomeScreen());
       } else {
         isLoginSuccessful = false;
         userIdBorderColor = Colors.red;
@@ -65,27 +61,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: Text(
                       "Log In To Your Account",
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold
+                      ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Center(
                     child: Text(
                       "Welcome back! Please log in to your account\nto continue where you left off.",
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey
+                      ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
                   // User ID Field
-                  Text("User Id", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                  SizedBox(height: 5),
+                  Text(
+                    "User Id",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  const SizedBox(height: 5),
                   TextField(
                     controller: userIdController,
                     decoration: InputDecoration(
                       hintText: "User Id",
-                      prefixIcon: Icon(Icons.person, color: Colors.grey),
+                      prefixIcon: const Icon(Icons.person, color: Colors.grey),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(color: userIdBorderColor),
@@ -96,22 +104,31 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: userIdBorderColor, width: 2),
+                        borderSide: BorderSide(
+                            color: userIdBorderColor,
+                            width: 2
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
 
                   // Password Field
-                  Text("Password", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                  SizedBox(height: 5),
+                  Text(
+                    "Password",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  const SizedBox(height: 5),
                   TextField(
                     controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "Password",
-                      prefixIcon: Icon(Icons.lock, color: Colors.grey),
-                      suffixIcon: Icon(Icons.visibility_off, color: Colors.grey),
+                      prefixIcon: const Icon(Icons.lock, color: Colors.grey),
+                      suffixIcon: const Icon(Icons.visibility_off, color: Colors.grey),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(color: passwordBorderColor),
@@ -122,43 +139,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: passwordBorderColor, width: 2),
+                        borderSide: BorderSide(
+                            color: passwordBorderColor,
+                            width: 2
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 15),
-
-                  // Terms and Conditions Checkbox
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: agreeTerms,
-                        onChanged: (value) {
-                          setState(() {
-                            agreeTerms = value!;
-                          });
-                        },
-                      ),
-                      Expanded(
-                        child: Text(
-                          "By creating an account, you agree to our",
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            agreeTerms = !agreeTerms;
-                          });
-                        },
-                        child: Text(
-                          "Terms and Conditions",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.purple),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
 
                   // Log In Button
                   SizedBox(
@@ -166,22 +155,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF683091),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        backgroundColor: const Color(0xFF683091),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                       ),
                       onPressed: validateLogin,
-                      child: InkWell(
-                        onTap: (){
-                        },
-
-                        child: Text(
-                          "Log In",
-                          style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                      child: const Text(
+                        "Log In",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Remember Me & Forgot Password
                   Row(
@@ -203,23 +192,54 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               },
                             ),
-                            Text("Remember me?", style: TextStyle(fontSize: 14)),
+                            const Text(
+                                "Remember me?",
+                                style: TextStyle(fontSize: 14)
+                            ),
                           ],
                         ),
                       ),
                       InkWell(
-                        onTap: (){
-                           Get.to(()=>ResetPasswordScreen());
+                        onTap: () {
+                          Get.to(() => ResetPasswordScreen());
                         },
-
-                        child: Text(
+                        child: const Text(
                           "Forgot Password?",
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.purple),
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.purple
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 50),
+
+                  // NEW SIGN UP OPTION
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUpScreen()),
+                          );
+                        },
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: Color(0xFF683091),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),

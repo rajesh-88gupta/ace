@@ -1,5 +1,8 @@
-import 'package:ace/screens/ProfileScreen.dart';
 import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const HomeScreen());
+}
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,6 +24,75 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+// DATA MODELS
+class QuickAction {
+  final String iconAsset;
+  final String label;
+  final Color bgColor;
+  final Color iconColor;
+  final VoidCallback onTap;
+
+  QuickAction({
+    required this.iconAsset,
+    required this.label,
+    required this.bgColor,
+    required this.iconColor,
+    required this.onTap,
+  });
+}
+
+class RecommendedCourse {
+  final String imageAsset;
+  final String title;
+  final String subTitle;
+  final String date;
+  final String price;
+  final String oldPrice;
+  final String batch;
+  final VoidCallback onTap;
+
+  RecommendedCourse({
+    required this.imageAsset,
+    required this.title,
+    required this.subTitle,
+    required this.date,
+    required this.price,
+    required this.oldPrice,
+    required this.batch,
+    required this.onTap,
+  });
+}
+
+class ClassCardModel {
+  final String imageAsset;
+  final String title;
+  final bool live;
+  final int instructors;
+  final String duration;
+  final VoidCallback onTap;
+
+  ClassCardModel({
+    required this.imageAsset,
+    required this.title,
+    required this.live,
+    required this.instructors,
+    required this.duration,
+    required this.onTap,
+  });
+}
+
+class Batchmate {
+  final String name;
+  final String batch;
+  final String imageUrl;
+
+  Batchmate({
+    required this.name,
+    required this.batch,
+    required this.imageUrl,
+  });
+}
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -30,6 +102,126 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
+
+  late List<QuickAction> quickActions;
+  late List<RecommendedCourse> recommendedCourses;
+  late List<ClassCardModel> classes;
+  List<Batchmate> batchmates = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  void _loadData() {
+    quickActions = [
+      QuickAction(
+        iconAsset: 'assets/images/icon1.png',
+        label: 'Join Class',
+        bgColor: const Color(0xFFFFF1F1),
+        iconColor: const Color(0xFFFF5B5B),
+        onTap: () {},
+      ),
+      QuickAction(
+        iconAsset: 'assets/images/icon2.png',
+        label: 'Ask Doubts',
+        bgColor: const Color(0xFFFFF6E6),
+        iconColor: const Color(0xFFFFA500),
+        onTap: () {},
+      ),
+      QuickAction(
+        iconAsset: 'assets/images/icon3.png',
+        label: 'Download Note',
+        bgColor: const Color(0xFFECECFF),
+        iconColor: const Color(0xFF7B2FF2),
+        onTap: () {},
+      ),
+    ];
+
+    recommendedCourses = [
+      RecommendedCourse(
+        imageAsset: 'assets/images/recom1.png',
+        title: "Study high school online",
+        subTitle: "E-learning",
+        date: "07 Apr 2025",
+        price: "\$499",
+        oldPrice: "\$550",
+        batch: "For Full batch",
+        onTap: () {},
+      ),
+      RecommendedCourse(
+        imageAsset: 'assets/images/recom2.png',
+        title: "Continuing Education (CE) Course",
+        subTitle: "E-learning",
+        date: "15 Apr 2025",
+        price: "\$199",
+        oldPrice: "\$250",
+        batch: "For Full batch",
+        onTap: () {},
+      ),
+      RecommendedCourse(
+        imageAsset: 'assets/courses/course3.jpg',
+        title: "Advanced Dental Techniques",
+        subTitle: "Workshop",
+        date: "22 May 2025",
+        price: "\$349",
+        oldPrice: "\$400",
+        batch: "For Full batch",
+        onTap: () {},
+      ),
+    ];
+
+    classes = [
+      ClassCardModel(
+        imageAsset: 'assets/images/classes1.png',
+        title: "Advanced Dental Admission Test (ADAT)",
+        live: true,
+        instructors: 16,
+        duration: "4h 45m",
+        onTap: () {},
+      ),
+      ClassCardModel(
+        imageAsset: 'assets/images/classes1.png',
+        title: "Clinical Skills Exam with Courses",
+        live: false,
+        instructors: 8,
+        duration: "6h 15m",
+        onTap: () {},
+      ),
+      ClassCardModel(
+        imageAsset: 'assets/classes/class3.jpg',
+        title: "Dental Anatomy Fundamentals",
+        live: true,
+        instructors: 12,
+        duration: "3h 30m",
+        onTap: () {},
+      ),
+    ];
+
+    batchmates = [
+      Batchmate(
+        name: "Adela Parkson",
+        batch: "The Smile Squad",
+        imageUrl: "https://randomuser.me/api/portraits/women/65.jpg",
+      ),
+      Batchmate(
+        name: "Christian Mad",
+        batch: "Pearly Whites 2025",
+        imageUrl: "https://randomuser.me/api/portraits/men/65.jpg",
+      ),
+      Batchmate(
+        name: "Sarah Johnson",
+        batch: "The Dental Dynasty",
+        imageUrl: "https://randomuser.me/api/portraits/women/66.jpg",
+      ),
+      Batchmate(
+        name: "Michael Brown",
+        batch: "Tooth Masters",
+        imageUrl: "https://randomuser.me/api/portraits/men/67.jpg",
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,103 +314,67 @@ class _HomePageState extends State<HomePage> {
   Widget _buildHeroBanner() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Stack(
-        children: [
-          Container(
-            height: 120,
-            decoration: BoxDecoration(
-              color: const Color(0xFF7B2FF2),
-              borderRadius: BorderRadius.circular(20),
-            ),
+      child: Container(
+        height: 120,
+        decoration: BoxDecoration(
+          color: const Color(0xFF7B2FF2),
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+            image: AssetImage('assets/images/banner_bg.png'), // Add your banner image
+            fit: BoxFit.cover,
           ),
-          Container(
-            height: 120,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          'The Right Choice Of',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          'Dental Course',
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 25),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF7B2FF2),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18)),
-                      minimumSize: const Size(88, 40),
-                      textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'The Right Choice Of',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
                       ),
-                      elevation: 0,
                     ),
-                    onPressed: () {},
-                    child: const Text('Enroll Now'),
-                  ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Dental Course',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          // Carousel dots (centered)
-          Positioned(
-            bottom: 10,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildDot(isActive: true),
-                  const SizedBox(width: 5),
-                  _buildDot(),
-                  const SizedBox(width: 5),
-                  _buildDot(),
-                ],
               ),
             ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDot({bool isActive = false}) {
-    return Container(
-      width: isActive ? 20 : 7,
-      height: 7,
-      decoration: BoxDecoration(
-        color: isActive ? Colors.white : Colors.white.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(7),
+            Padding(
+              padding: const EdgeInsets.only(right: 25),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF7B2FF2),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18)),
+                  minimumSize: const Size(88, 40),
+                  textStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                  elevation: 0,
+                ),
+                onPressed: () {},
+                child: const Text('Enroll Now'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -226,68 +382,87 @@ class _HomePageState extends State<HomePage> {
   Widget _buildTopOptions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Row(
-        children: [
-          _buildTopOptionCard(
-            icon: Icons.video_call,
-            label: 'Join Class',
-            bgColor: const Color(0xFFFFF1F1),
-            iconColor: const Color(0xFFFF5B5B),
-            onTap: () {},
-          ),
-          const SizedBox(width: 10),
-          _buildTopOptionCard(
-            icon: Icons.settings,
-            label: 'Ask Doubts',
-            bgColor: const Color(0xFFFFF6E6),
-            iconColor: const Color(0xFFFFA500),
-            onTap: () {},
-          ),
-          const SizedBox(width: 10),
-          _buildTopOptionCard(
-            icon: Icons.download_for_offline_rounded,
-            label: 'Download Note',
-            bgColor: const Color(0xFFECECFF),
-            iconColor: const Color(0xFF7B2FF2),
-            onTap: () {},
-          ),
-        ],
+      child: SizedBox(
+        height: 90,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: quickActions.length,
+          itemBuilder: (context, index) {
+            final action = quickActions[index];
+            return Container(
+              width: MediaQuery.of(context).size.width / 3.5,
+              margin: EdgeInsets.only(right: index == quickActions.length - 1 ? 0 : 10),
+              child: _buildTopOptionCard(
+                iconAsset: action.iconAsset,
+                label: action.label,
+                bgColor: action.bgColor,
+                iconColor: action.iconColor,
+                onTap: action.onTap,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
   Widget _buildTopOptionCard({
-    required IconData icon,
+    required String iconAsset,
     required String label,
     required Color bgColor,
     required Color iconColor,
     required VoidCallback onTap,
   }) {
-    return Expanded(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Container(
-          height: 68,
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: [
-              BoxShadow(
-                color: bgColor.withOpacity(0.09),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(
+              color: bgColor.withOpacity(0.09),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 7),
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: iconColor, size: 28),
-              const SizedBox(height: 7),
-              Text(label, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13, color: Colors.black)),
-            ],
-          ),
+              child: Padding(
+                padding: const EdgeInsets.all(7),
+                child: Image.asset(
+                  iconAsset,
+                  color: iconColor,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            const SizedBox(height: 9),
+            Text(label,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                    color: Colors.black
+                )),
+          ],
         ),
       ),
     );
@@ -322,67 +497,36 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Helper for image or placeholder
-  Widget buildImageOrPlaceholder({String? imageUrl, double height = 90, double borderRadius = 18}) {
-    return ClipRRect(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
-      child: imageUrl == null || imageUrl.isEmpty
-          ? Container(
-        height: height,
-        color: Colors.grey.shade200,
-        child: Center(
-          child: Icon(Icons.image, size: 32, color: Colors.grey.shade400),
-        ),
-      )
-          : Image.network(
-        imageUrl,
-        fit: BoxFit.cover,
-        height: height,
-        width: double.infinity,
-        errorBuilder: (context, error, stackTrace) => Container(
-          height: height,
-          color: Colors.grey.shade200,
-          child: Center(
-            child: Icon(Icons.broken_image, size: 32, color: Colors.grey.shade400),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildRecommendedSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Row(
-        children: [
-          Expanded(child: _buildRecommendedCard(
-            imageUrl: "", // Empty for now, placeholder will show
-            title: "Study high school online",
-            subTitle: "E-learning",
-            date: "07 Apr 2025",
-            price: "\$499",
-            oldPrice: "\$550",
-            batch: "For Full batch",
-            onTap: () {},
-          )),
-          const SizedBox(width: 12),
-          Expanded(child: _buildRecommendedCard(
-            imageUrl: "", // Empty for now, placeholder will show
-            title: "Continuing Education (CE) Course",
-            subTitle: "E-learning",
-            date: "15 Apr 2025",
-            price: "\$199",
-            oldPrice: "\$250",
-            batch: "For Full batch",
-            onTap: () {},
-          )),
-        ],
+    return SizedBox(
+      height: 220,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        itemCount: recommendedCourses.length,
+        itemBuilder: (context, index) {
+          final course = recommendedCourses[index];
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.76, // Wider card
+            margin: EdgeInsets.only(right: index == recommendedCourses.length - 1 ? 0 : 18),
+            child: _buildRecommendedCard(
+              imageAsset: course.imageAsset,
+              title: course.title,
+              subTitle: course.subTitle,
+              date: course.date,
+              price: course.price,
+              oldPrice: course.oldPrice,
+              batch: course.batch,
+              onTap: course.onTap,
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget _buildRecommendedCard({
-    required String? imageUrl,
+    required String imageAsset,
     required String title,
     String? subTitle,
     required String date,
@@ -395,7 +539,6 @@ class _HomePageState extends State<HomePage> {
       borderRadius: BorderRadius.circular(18),
       onTap: onTap,
       child: Container(
-        height: 205,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
@@ -410,51 +553,97 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildImageOrPlaceholder(imageUrl: imageUrl, height: 90, borderRadius: 18),
+            // Bigger image
+            Container(
+              height: 120,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+                color: Colors.grey.shade200,
+                image: DecorationImage(
+                  image: AssetImage(imageAsset),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: imageAsset.isEmpty
+                  ? const Center(child: Icon(Icons.image, size: 40, color: Colors.grey))
+                  : null,
+            ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
               child: Row(
                 children: [
                   if (subTitle != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: const Color(0xFFE0E7FF),
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Text(subTitle, style: const TextStyle(fontSize: 11, color: Color(0xFF7B2FF2))),
+                      child: Text(subTitle,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF7B2FF2),
+                            fontWeight: FontWeight.w600,
+                          )),
                     ),
                   const Spacer(),
                   Row(
                     children: [
-                      const Icon(Icons.calendar_today, size: 12, color: Color(0xFF7B2FF2)),
+                      const Icon(Icons.calendar_today, size: 13, color: Color(0xFF7B2FF2)),
                       const SizedBox(width: 2),
-                      Text("Start On $date", style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                      Text("Start On $date",
+                          style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey
+                          )),
                     ],
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 4, 10, 0),
-              child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+              padding: const EdgeInsets.fromLTRB(12, 6, 12, 0),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  height: 1.3,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 3, 10, 0),
+              padding: const EdgeInsets.fromLTRB(12, 5, 12, 0),
               child: Row(
                 children: [
-                  Text(price, style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF7B2FF2), fontSize: 14)),
+                  Text(price,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF7B2FF2),
+                          fontSize: 15)),
                   const SizedBox(width: 7),
                   Text(
                     oldPrice,
                     style: const TextStyle(
                       color: Colors.grey,
-                      fontSize: 12,
+                      fontSize: 13,
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),
                   const SizedBox(width: 13),
-                  Text("($batch)", style: const TextStyle(color: Colors.grey, fontSize: 10)),
+                  Expanded(
+                    child: Text("($batch)",
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -465,35 +654,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildClassesSection() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Row(
-        children: [
-          Expanded(child: _buildClassCard(
-            imageUrl: "", // Empty for now, placeholder will show
-            title: "Advanced Dental Admission Test (ADAT)",
-            live: true,
-            instructors: 16,
-            duration: "4h 45m",
-            onTap: () {},
-          )),
-          const SizedBox(width: 12),
-          Expanded(child: _buildClassCard(
-            imageUrl: "", // Empty for now, placeholder will show
-            title: "Clinical Skills Exam with Courses",
-            live: false,
-            instructors: 8,
-            duration: "6h 15m",
-            onTap: () {},
-          )),
-        ],
+    return SizedBox(
+      height: 220,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        itemCount: classes.length,
+        itemBuilder: (context, index) {
+          final classItem = classes[index];
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.76,
+            margin: EdgeInsets.only(right: index == classes.length - 1 ? 0 : 18),
+            child: _buildClassCard(
+              imageAsset: classItem.imageAsset,
+              title: classItem.title,
+              live: classItem.live,
+              instructors: classItem.instructors,
+              duration: classItem.duration,
+              onTap: classItem.onTap,
+            ),
+          );
+        },
       ),
     );
   }
 
-  // THIS IS THE CORRECTED WIDGET
   Widget _buildClassCard({
-    required String? imageUrl,
+    required String imageAsset,
     required String title,
     required bool live,
     required int instructors,
@@ -504,7 +691,6 @@ class _HomePageState extends State<HomePage> {
       borderRadius: BorderRadius.circular(18),
       onTap: onTap,
       child: Container(
-        height: 137,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
@@ -519,72 +705,114 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Class image with live indicator
             Stack(
               children: [
-                buildImageOrPlaceholder(imageUrl: imageUrl, height: 64, borderRadius: 18),
+                Container(
+                  height: 120,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+                    color: Colors.grey.shade200,
+                    image: DecorationImage(
+                      image: AssetImage(imageAsset),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: imageAsset.isEmpty
+                      ? const Center(child: Icon(Icons.image, size: 40, color: Colors.grey))
+                      : null,
+                ),
                 if (live)
                   Positioned(
-                    left: 8,
-                    top: 8,
+                    left: 12,
+                    top: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.red,
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(7),
                       ),
                       child: const Text(
                         'Live classes',
-                        style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600
+                        ),
                       ),
                     ),
                   ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
               child: Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  height: 1.3,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 7, 10, 0),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
               child: Row(
                 children: [
-                  // Corrected overlapping avatars using Stack
                   SizedBox(
-                    // Calculate width needed for overlapping avatars:
-                    // (avatarDiameter) + (numberOfAvatars - 1) * (avatarDiameter - overlapAmount)
-                    // For 2 avatars with radius 11 (diameter 22) and 8px overlap:
-                    // 22 + (2-1) * (22 - 8) = 22 + 1 * 14 = 36
-                    width: (11 * 2) + ((2 > 1 ? 2 - 1 : 0) * ((11 * 2) - 8.0)),
-                    height: 11 * 2, // Height of one avatar (diameter)
+                    width: 38,
+                    height: 24,
                     child: Stack(
-                      children: List.generate(2, (i) { // Assuming 2 avatars as per original code structure
-                        return Positioned(
-                          left: i * ((11 * 2) - 8.0), // Position subsequent avatars with overlap
-                          // For i=0 (first avatar): left = 0 * (22-8) = 0
-                          // For i=1 (second avatar): left = 1 * (22-8) = 14
-                          child: const CircleAvatar(
-                            radius: 11,
-                            backgroundColor: Colors.white, // Outer circle for border effect
+                      children: [
+                        Positioned(
+                          left: 0,
+                          child: CircleAvatar(
+                            radius: 12,
+                            backgroundColor: Colors.white,
                             child: CircleAvatar(
-                              radius: 10, // Inner circle for image (slightly smaller for border effect)
-                              backgroundImage: NetworkImage("https://randomuser.me/api/portraits/men/43.jpg"),
+                              radius: 11,
+                              backgroundImage: NetworkImage(
+                                  "https://randomuser.me/api/portraits/men/43.jpg"),
                             ),
                           ),
-                        );
-                      }).reversed.toList(), // .reversed ensures the first avatar (i=0) is visually on top
+                        ),
+                        Positioned(
+                          left: 16,
+                          child: CircleAvatar(
+                            radius: 12,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 11,
+                              backgroundImage: NetworkImage(
+                                  "https://randomuser.me/api/portraits/men/44.jpg"),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 7), // Spacing after avatar group
-                  Text("$instructors+ Instructor", style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                  const Spacer(),
-                  const Icon(Icons.schedule, color: Color(0xFF7B2FF2), size: 14),
-                  const SizedBox(width: 3),
-                  Text(duration, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      "$instructors+ Instructor",
+                      style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const Icon(Icons.schedule, color: Color(0xFF7B2FF2), size: 16),
+                  const SizedBox(width: 4),
+                  Text(duration,
+                      style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 13
+                      )),
                 ],
               ),
             ),
@@ -593,7 +821,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 
   Widget _buildAttendanceSection() {
     return Padding(
@@ -621,11 +848,20 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(count, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28, color: textColor)),
+            Text(count,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: textColor
+                )),
             const SizedBox(height: 5),
             Text(
               label,
-              style: TextStyle(fontSize: 14, color: textColor, fontWeight: FontWeight.w600),
+              style: TextStyle(
+                  fontSize: 14,
+                  color: textColor,
+                  fontWeight: FontWeight.w600
+              ),
             ),
             const SizedBox(height: 2),
             const Text(
@@ -650,9 +886,9 @@ class _HomePageState extends State<HomePage> {
             lessons: 8,
             completedStep: 1,
             totalSteps: 7,
-            desc: "The Assessment of Fundamental Knowledge (AFK) is the first step for internationally trained dentists aspiring to become licensed in Canada...",
+            desc: "The Assessment of Fundamental Knowledge (AFK) is the first step for internationally trained dentists...",
           ),
-          const SizedBox(height: 9),
+          const SizedBox(height: 18), // More spacing between cards
           _buildUpcomingTaskCard(
             title: "Mock Exams (Onsite) & Discussions",
             date: "10 Apr 2025",
@@ -661,7 +897,7 @@ class _HomePageState extends State<HomePage> {
             totalSteps: null,
             desc: "",
           ),
-          const SizedBox(height: 9),
+          const SizedBox(height: 18),
           _buildUpcomingTaskCard(
             title: "Subject Wise Test",
             date: "14 Apr 2025",
@@ -685,53 +921,86 @@ class _HomePageState extends State<HomePage> {
     int? totalSteps,
   }) {
     return Container(
+      margin: const EdgeInsets.only(bottom: 0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.07),
+            blurRadius: 12,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
-      padding: const EdgeInsets.fromLTRB(13, 13, 13, 14),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Expanded(
-                child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                child: Text(title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15
+                    )),
               ),
               if (highPriority)
                 Container(
                   margin: const EdgeInsets.only(left: 3),
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFF5B5B),
                     borderRadius: BorderRadius.circular(7),
                   ),
-                  child: const Text("High Priority", style: TextStyle(color: Colors.white, fontSize: 11)),
+                  child: const Text("High Priority",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12
+                      )),
                 ),
             ],
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 10),
           Row(
             children: [
-              const Icon(Icons.calendar_today, size: 13, color: Color(0xFF7B2FF2)),
-              const SizedBox(width: 4),
-              Text("Start On $date", style: const TextStyle(fontSize: 12, color: Colors.grey)),
-              const SizedBox(width: 19),
-              const Icon(Icons.menu_book, size: 13, color: Color(0xFF7B2FF2)),
-              const SizedBox(width: 4),
-              Text("$lessons Lesson", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+              const Icon(Icons.calendar_today, size: 15, color: Color(0xFF7B2FF2)),
+              const SizedBox(width: 6),
+              Text("Start On $date",
+                  style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey
+                  )),
+              const SizedBox(width: 20),
+              const Icon(Icons.menu_book, size: 15, color: Color(0xFF7B2FF2)),
+              const SizedBox(width: 6),
+              Text("$lessons Lesson",
+                  style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey
+                  )),
             ],
           ),
           if (desc.isNotEmpty) ...[
-            const SizedBox(height: 7),
-            Text(desc, style: const TextStyle(fontSize: 12, color: Colors.black54)),
+            const SizedBox(height: 10),
+            Text(desc,
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                  height: 1.4,
+                )),
           ],
           if (completedStep != null && totalSteps != null) ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: 14),
             Row(
               children: [
-                Text("$completedStep of $totalSteps steps completed", style: const TextStyle(fontSize: 12, color: Color(0xFF7B2FF2))),
-                const SizedBox(width: 7),
+                Text("$completedStep of $totalSteps steps completed",
+                    style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF7B2FF2)
+                    )),
+                const SizedBox(width: 10),
                 Expanded(
                   child: LinearProgressIndicator(
                     value: completedStep / totalSteps,
@@ -752,18 +1021,23 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Column(
-        children: [
-          _buildBatchmateItem("Adela Parkson", "The Smile Squad", "https://randomuser.me/api/portraits/women/65.jpg"),
-          const SizedBox(height: 7),
-          _buildBatchmateItem("Christian Mad", "Pearly Whites 2025", "https://randomuser.me/api/portraits/men/65.jpg"),
-          const SizedBox(height: 7),
-          _buildBatchmateItem("Christian Mad", "The Dental Dynasty", "https://randomuser.me/api/portraits/men/66.jpg"),
-        ],
+        children: batchmates.map((batchmate) => Padding(
+          padding: const EdgeInsets.only(bottom: 7),
+          child: _buildBatchmateItem(
+            name: batchmate.name,
+            batch: batchmate.batch,
+            imageUrl: batchmate.imageUrl,
+          ),
+        )).toList(),
       ),
     );
   }
 
-  Widget _buildBatchmateItem(String name, String batch, String imageUrl) {
+  Widget _buildBatchmateItem({
+    required String name,
+    required String batch,
+    required String imageUrl,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       decoration: BoxDecoration(
@@ -781,8 +1055,16 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                Text(batch, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                Text(name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14
+                    )),
+                Text(batch,
+                    style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey
+                    )),
               ],
             ),
           ),
@@ -796,30 +1078,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNavBar() {
-    // DO NOT TOUCH BOTTOM NAVBAR - as per instruction
     return BottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: (index) {
         setState(() {
           _currentIndex = index;
         });
-        switch (index) {
-          case 0:
-            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-            break;
-          case 1:
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => CoursesScreen()));
-            break;
-          case 2:
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => ScheduleScreen()));
-            break;
-          case 3:
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileApp()));
-            break;
-          case 4:
-            // Navigator.push(context, MaterialPageRoute(builder: (context) => MoreScreen()));
-            break;
-        }
       },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: Colors.blue,
@@ -848,5 +1112,4 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-
 }
