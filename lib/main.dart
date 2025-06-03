@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ace/screens/LoginScreen.dart';
 import 'package:ace/screens/SignupScreen.dart';
+import 'package:ace/screens/HomeScreen.dart';
 import 'package:ace/utils/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,13 +14,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const SplashScreen(),
@@ -27,6 +26,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -39,14 +39,16 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       bool isLoggedIn = checkUserLoginStatus();
       if (isLoggedIn) {
+        // If user is logged in, go to HomeScreen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => SignUpScreen()),
+          MaterialPageRoute(builder: (context) => HomeScreen()),
         );
       } else {
+        // If user is not logged in, go to LoginScreen
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => LoginScreen()),
@@ -54,34 +56,32 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
   }
+
   bool checkUserLoginStatus() {
-    // Simulating user login check. Replace with SharedPreferences, Firebase, or API call
-    return true; // Change this to `true` if user is logged in
+    // Replace this with actual login check logic
+    // For now, we'll return false to always show login screen first
+    return false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor, // Set background color
+      backgroundColor: bgColor,
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: bgColor, // Background color
+          color: bgColor,
           image: DecorationImage(
             opacity: 0.5,
-            image: AssetImage("assets/images/splash_bg.png"), // Background image
-            fit: BoxFit.cover, // Cover the full screen
+            image: AssetImage("assets/images/splash_bg.png"),
+            fit: BoxFit.cover,
           ),
         ),
         child: Center(
-          child: Image.asset("assets/images/acelogo.png", ), // Your logo
+          child: Image.asset("assets/images/acelogo.png"),
         ),
       ),
     );
   }
-
 }
-
-
-
