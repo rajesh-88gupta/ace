@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'homescreen/DownlodNotesScreen.dart';
+import 'homescreen/JoinClassScreen.dart';
+import 'homescreen/AskDoubtsScreen.dart';
+import 'homescreen/courses_screen.dart'; // Import new screen
+import 'homescreen/category_screen.dart'; // Import new screen
+import 'homescreen/profile_screen.dart'; // Import new screen
 
 void main() {
   runApp(const HomeScreen());
@@ -20,6 +26,11 @@ class HomeScreen extends StatelessWidget {
       ),
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/download-notes': (context) => const DownloadNotesScreen(),
+        '/joinClass': (context) => const JoinClassScreen(),
+        '/askDoubts': (context) => const AskDoubtsScreen(),
+      },
     );
   }
 }
@@ -108,10 +119,21 @@ class _HomePageState extends State<HomePage> {
   late List<ClassCardModel> classes;
   List<Batchmate> batchmates = [];
 
+  // List of widgets to display in the body
+  late final List<Widget> _pages;
+
   @override
   void initState() {
     super.initState();
     _loadData();
+
+    // Initialize the pages list
+    _pages = [
+      _buildHomeContent(), // Your original home page content
+      const CoursesScreen(),
+      const CategoryScreen(),
+      const ProfileScreen(),
+    ];
   }
 
   void _loadData() {
@@ -121,21 +143,27 @@ class _HomePageState extends State<HomePage> {
         label: 'Join Class',
         bgColor: const Color(0xFFFFF1F1),
         iconColor: const Color(0xFFFF5B5B),
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/joinClass');
+        },
       ),
       QuickAction(
         iconAsset: 'assets/images/icon2.png',
         label: 'Ask Doubts',
         bgColor: const Color(0xFFFFF6E6),
         iconColor: const Color(0xFFFFA500),
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/askDoubts');
+        },
       ),
       QuickAction(
         iconAsset: 'assets/images/icon3.png',
         label: 'Download Note',
         bgColor: const Color(0xFFECECFF),
         iconColor: const Color(0xFF7B2FF2),
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/download-notes');
+        },
       ),
     ];
 
@@ -226,38 +254,47 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 18),
-              _buildHeroBanner(),
-              const SizedBox(height: 18),
-              _buildTopOptions(),
-              const SizedBox(height: 14),
-              _buildSectionTitle('Recommended For You', showViewMore: true),
-              _buildRecommendedSection(),
-              const SizedBox(height: 18),
-              _buildSectionTitle('Classes', showViewMore: true),
-              _buildClassesSection(),
-              const SizedBox(height: 18),
-              _buildSectionTitle('Attendance For', showViewMore: true),
-              _buildAttendanceSection(),
-              const SizedBox(height: 18),
-              _buildSectionTitle('Upcoming Task'),
-              _buildUpcomingTasksSection(),
-              const SizedBox(height: 18),
-              _buildSectionTitle('Batchmates / Batch Name', showViewMore: true),
-              _buildBatchmatesSection(),
-              const SizedBox(height: 16),
-            ],
-          ),
-        ),
+      // The body now shows the currently selected page
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
       ),
       bottomNavigationBar: _buildBottomNavBar(),
+    );
+  }
+
+  // Extracted the home page content into its own method for clarity
+  Widget _buildHomeContent() {
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            const SizedBox(height: 18),
+            _buildHeroBanner(),
+            const SizedBox(height: 18),
+            _buildTopOptions(),
+            const SizedBox(height: 14),
+            _buildSectionTitle('Recommended For You', showViewMore: true),
+            _buildRecommendedSection(),
+            const SizedBox(height: 18),
+            _buildSectionTitle('Classes', showViewMore: true),
+            _buildClassesSection(),
+            const SizedBox(height: 18),
+            _buildSectionTitle('Attendance For', showViewMore: true),
+            _buildAttendanceSection(),
+            const SizedBox(height: 18),
+            _buildSectionTitle('Upcoming Task'),
+            _buildUpcomingTasksSection(),
+            const SizedBox(height: 18),
+            _buildSectionTitle('Batchmates / Batch Name', showViewMore: true),
+            _buildBatchmatesSection(),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
     );
   }
 
@@ -460,8 +497,7 @@ class _HomePageState extends State<HomePage> {
                 style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 13,
-                    color: Colors.black
-                )),
+                    color: Colors.black)),
           ],
         ),
       ),
@@ -595,8 +631,7 @@ class _HomePageState extends State<HomePage> {
                       Text("Start On $date",
                           style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey
-                          )),
+                              color: Colors.grey)),
                     ],
                   ),
                 ],
@@ -636,13 +671,11 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(width: 13),
                   Expanded(
                     child: Text("($batch)",
-                      style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                        style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis),
                   ),
                 ],
               ),
@@ -738,8 +771,7 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 12,
-                            fontWeight: FontWeight.w600
-                        ),
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                   ),
@@ -800,8 +832,7 @@ class _HomePageState extends State<HomePage> {
                       "$instructors+ Instructor",
                       style: const TextStyle(
                           fontSize: 13,
-                          color: Colors.grey
-                      ),
+                          color: Colors.grey),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -811,8 +842,7 @@ class _HomePageState extends State<HomePage> {
                   Text(duration,
                       style: const TextStyle(
                           color: Colors.grey,
-                          fontSize: 13
-                      )),
+                          fontSize: 13)),
                 ],
               ),
             ),
@@ -852,16 +882,14 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 28,
-                    color: textColor
-                )),
+                    color: textColor)),
             const SizedBox(height: 5),
             Text(
               label,
               style: TextStyle(
                   fontSize: 14,
                   color: textColor,
-                  fontWeight: FontWeight.w600
-              ),
+                  fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 2),
             const Text(
@@ -943,8 +971,7 @@ class _HomePageState extends State<HomePage> {
                 child: Text(title,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 15
-                    )),
+                        fontSize: 15)),
               ),
               if (highPriority)
                 Container(
@@ -957,8 +984,7 @@ class _HomePageState extends State<HomePage> {
                   child: const Text("High Priority",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12
-                      )),
+                          fontSize: 12)),
                 ),
             ],
           ),
@@ -970,16 +996,14 @@ class _HomePageState extends State<HomePage> {
               Text("Start On $date",
                   style: const TextStyle(
                       fontSize: 13,
-                      color: Colors.grey
-                  )),
+                      color: Colors.grey)),
               const SizedBox(width: 20),
               const Icon(Icons.menu_book, size: 15, color: Color(0xFF7B2FF2)),
               const SizedBox(width: 6),
               Text("$lessons Lesson",
                   style: const TextStyle(
                       fontSize: 13,
-                      color: Colors.grey
-                  )),
+                      color: Colors.grey)),
             ],
           ),
           if (desc.isNotEmpty) ...[
@@ -998,8 +1022,7 @@ class _HomePageState extends State<HomePage> {
                 Text("$completedStep of $totalSteps steps completed",
                     style: const TextStyle(
                         fontSize: 13,
-                        color: Color(0xFF7B2FF2)
-                    )),
+                        color: Color(0xFF7B2FF2))),
                 const SizedBox(width: 10),
                 Expanded(
                   child: LinearProgressIndicator(
@@ -1021,14 +1044,16 @@ class _HomePageState extends State<HomePage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Column(
-        children: batchmates.map((batchmate) => Padding(
+        children: batchmates
+            .map((batchmate) => Padding(
           padding: const EdgeInsets.only(bottom: 7),
           child: _buildBatchmateItem(
             name: batchmate.name,
             batch: batchmate.batch,
             imageUrl: batchmate.imageUrl,
           ),
-        )).toList(),
+        ))
+            .toList(),
       ),
     );
   }
@@ -1058,13 +1083,11 @@ class _HomePageState extends State<HomePage> {
                 Text(name,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14
-                    )),
+                        fontSize: 14)),
                 Text(batch,
                     style: const TextStyle(
                         fontSize: 12,
-                        color: Colors.grey
-                    )),
+                        color: Colors.grey)),
               ],
             ),
           ),
@@ -1086,28 +1109,26 @@ class _HomePageState extends State<HomePage> {
         });
       },
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.blue,
+      selectedItemColor: const Color(0xFF7B2FF2),
       unselectedItemColor: Colors.grey,
+      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+      unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
+          icon: Icon(Icons.home_filled),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.school),
+          icon: Icon(Icons.school_outlined),
           label: 'Courses',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: 'Schedule',
+          icon: Icon(Icons.category_outlined),
+          label: 'Category',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.person_outline),
           label: 'Profile',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.more_horiz),
-          label: 'More',
         ),
       ],
     );
