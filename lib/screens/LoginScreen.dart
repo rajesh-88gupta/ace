@@ -2,7 +2,9 @@ import 'package:ace/screens/HomeScreen.dart';
 import 'package:ace/screens/ResetPassword.dart';
 import 'package:ace/screens/SignupScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:ace/services/api_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,29 +15,67 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool rememberMe = false;
-  bool isLoginSuccessful = false;
-  bool isLoginAttempted = false;
+  bool _isLoading = false;
 
-  final TextEditingController userIdController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  Color userIdBorderColor = Colors.grey;
+  Color emailBorderColor = Colors.grey;
   Color passwordBorderColor = Colors.grey;
 
-  void validateLogin() {
+  // Create an instance of FlutterSecureStorage
+  final storage = const FlutterSecureStorage();
+
+  void apiLogin() async {
+    // Basic validation
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email and password cannot be empty.")),
+      );
+      return;
+    }
+
     setState(() {
-      isLoginAttempted = true;
-      if (userIdController.text == "admin" && passwordController.text == "1234") {
-        isLoginSuccessful = true;
-        userIdBorderColor = Colors.green;
-        passwordBorderColor = Colors.green;
-        Get.to(() => HomeScreen());
-      } else {
-        isLoginSuccessful = false;
-        userIdBorderColor = Colors.red;
-        passwordBorderColor = Colors.red;
-      }
+      _isLoading = true; // Show loading indicator
     });
+
+    // Call the login method from ApiService
+    final result = await ApiService.login(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+
+    setState(() {
+      _isLoading = false; // Hide loading indicator
+    });
+
+    // Handle the API response
+    if (result['status'] == 200) {
+      // On success, save the access token securely
+      // NOTE: The key 'access' depends on your specific API response structure.
+      // Based on the image you sent, it's likely under result['data']['token']['access']
+      await storage.write(
+        key: 'auth_token',
+        value: result['data']['token']['access'],
+      );
+
+      setState(() {
+        emailBorderColor = Colors.green;
+        passwordBorderColor = Colors.green;
+      });
+      // Navigate to home screen and clear previous routes
+      Get.offAll(() => HomeScreen());
+    } else {
+      setState(() {
+        emailBorderColor = Colors.red;
+        passwordBorderColor = Colors.red;
+      });
+      // Show an error message from the API response
+      final errorMessage = result['data']?['detail'] ?? result['error'] ?? 'An unknown error occurred.';
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage)),
+      );
+    }
   }
 
   @override
@@ -44,6 +84,10 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
+          if (_isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
           Align(
             alignment: Alignment.bottomCenter,
             child: Image.asset(
@@ -58,68 +102,50 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
+                  const Center(
                     child: Text(
                       "Log In To Your Account",
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold
-                      ),
+                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Center(
+                  const Center(
                     child: Text(
                       "Welcome back! Please log in to your account\nto continue where you left off.",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey),
                     ),
                   ),
                   const SizedBox(height: 30),
-
-                  // User ID Field
-                  Text(
-                    "User Id",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500
-                    ),
+                  const Text(
+                    "Email",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 5),
                   TextField(
-                    controller: userIdController,
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      hintText: "User Id",
-                      prefixIcon: const Icon(Icons.person, color: Colors.grey),
+                      hintText: "user@example.com",
+                      prefixIcon: const Icon(Icons.email, color: Colors.grey),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: userIdBorderColor),
+                        borderSide: BorderSide(color: emailBorderColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: userIdBorderColor),
+                        borderSide: BorderSide(color: emailBorderColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: userIdBorderColor,
-                            width: 2
-                        ),
+                        borderSide: BorderSide(color: emailBorderColor, width: 2),
                       ),
                     ),
                   ),
                   const SizedBox(height: 15),
-
-                  // Password Field
-                  Text(
+                  const Text(
                     "Password",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 5),
                   TextField(
@@ -139,17 +165,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: passwordBorderColor,
-                            width: 2
-                        ),
+                        borderSide: BorderSide(color: passwordBorderColor, width: 2),
                       ),
                     ),
                   ),
                   const SizedBox(height: 15),
                   const SizedBox(height: 20),
-
-                  // Log In Button
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -159,20 +180,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                       ),
-                      onPressed: validateLogin,
+                      onPressed: _isLoading ? null : apiLogin,
                       child: const Text(
                         "Log In",
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold
-                        ),
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
-
-                  // Remember Me & Forgot Password
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -214,8 +232,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-
-                  // NEW SIGN UP OPTION
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

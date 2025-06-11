@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:ace/screens/LoginScreen.dart';
-import 'package:ace/screens/SignupScreen.dart';
 import 'package:ace/screens/HomeScreen.dart';
 import 'package:ace/utils/color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 void main() {
@@ -35,32 +35,31 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // Create an instance of FlutterSecureStorage
+  final storage = const FlutterSecureStorage();
+
   @override
   void initState() {
     super.initState();
-
-    Timer(const Duration(seconds: 3), () {
-      bool isLoggedIn = checkUserLoginStatus();
-      if (isLoggedIn) {
-        // If user is logged in, go to HomeScreen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      } else {
-        // If user is not logged in, go to LoginScreen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-        );
-      }
-    });
+    // Check the user's authentication status when the screen loads
+    _checkAuthStatus();
   }
 
-  bool checkUserLoginStatus() {
-    // Replace this with actual login check logic
-    // For now, we'll return false to always show login screen first
-    return false;
+  Future<void> _checkAuthStatus() async {
+    // Artificial delay for the splash screen
+    await Future.delayed(const Duration(seconds: 3));
+
+    // Try to read the token from secure storage
+    String? token = await storage.read(key: 'auth_token');
+
+    // Navigate based on whether the token exists
+    if (token != null) {
+      // If user is logged in (token exists), go to HomeScreen
+      Get.offAll(() => HomeScreen());
+    } else {
+      // If user is not logged in, go to LoginScreen
+      Get.offAll(() => LoginScreen());
+    }
   }
 
   @override

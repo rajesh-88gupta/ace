@@ -1,11 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-
 import '../services/api_services.dart';
 import 'LoginScreen.dart';
+import 'package:flutter/foundation.dart'; // Import for kDebugMode
 
 class SignUpScreen extends StatelessWidget {
   SignUpScreen({super.key});
@@ -13,227 +12,337 @@ class SignUpScreen extends StatelessWidget {
   final AuthController controller = Get.put(AuthController());
 
   Future<void> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+      );
 
-    if (result != null && result.files.single.path != null) {
-      File file = File(result.files.single.path!);
-      String name = result.files.single.name;
+      if (result != null) {
+        if (result.files.single.size > 25 * 1024 * 1024) {
+          Get.snackbar("Error", "File size must be less than 25MB");
+          return;
+        }
 
-      controller.setSelectedFile(file, name);
+        File file = File(result.files.single.path!);
+        String name = result.files.single.name;
+        controller.setSelectedFile(file, name);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('File picker error: $e');
+      }
+      Get.snackbar("Error", "Failed to pick file: ${e.toString()}");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Obx(() => SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 50),
-            const Text(
-              "Create Your Account",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Please fill in your details to create your account and enjoy our se rvices.",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 20),
-
-            // Full Name
-            TextField(
-              controller: controller.fullNameController,
-              decoration: InputDecoration(
-                hintText: "Full Name",
-                prefixIcon: Icon(Icons.person),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // Email
-            TextField(
-              controller: controller.emailController,
-              decoration: InputDecoration(
-                hintText: "Email",
-                prefixIcon: Icon(Icons.email),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // Password
-            TextField(
-              controller: controller.passwordController,
-              decoration: InputDecoration(
-                hintText: "Password",
-                prefixIcon: Icon(Icons.lock),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 10),
-
-            // Role
-            DropdownButtonFormField<String>(
-              items: ["Student", "Teacher", "Admin"].map((role) {
-                return DropdownMenuItem(value: role, child: Text(role));
-              }).toList(),
-              onChanged: (value) {
-                controller.selectedRole.value = value ?? '';
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // File Upload Section
-            GestureDetector(
-              onTap: pickFile,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.purple),
-                  borderRadius: BorderRadius.circular(8),
+      appBar: AppBar(
+        title: const Text("Sign Up"),
+        centerTitle: true,
+        backgroundColor: const Color(0xFF683091),
+        foregroundColor: Colors.white,
+      ),
+      body: Obx(
+            () => controller.isLoading.value
+            ? const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF683091)),
+          ),
+        )
+            : SingleChildScrollView(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: controller.fullNameController,
+                decoration: InputDecoration(
+                  labelText: "Full Name",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
-                child: const Center(
-                  child: Text(
-                    "Click to Upload or drag and drop\n(Max. File size 25 MB)",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.purple,
-                      decoration: TextDecoration.underline,
-                    ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: controller.emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: controller.phoneNumberController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  labelText: "Phone Number",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: controller.cityController,
+                decoration: InputDecoration(
+                  labelText: "City",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: controller.provinceController,
+                decoration: InputDecoration(
+                  labelText: "Province",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: controller.selectedGender.value.isEmpty
+                    ? null
+                    : controller.selectedGender.value,
+                decoration: InputDecoration(
+                  labelText: "Gender",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                hint: const Text("Select Gender"),
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    controller.setSelectedGender(newValue);
+                  }
+                },
+                items: <String>['Male', 'Female', 'Other']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: controller.selectedRole.value.isEmpty
+                    ? null
+                    : controller.selectedRole.value,
+                decoration: InputDecoration(
+                  labelText: "Role",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                hint: const Text("Select Role"),
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    controller.setSelectedRole(newValue);
+                  }
+                },
+                items: <String>['Student', 'Teacher', 'Admin']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: pickFile,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15, horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.attach_file),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Obx(
+                              () => Text(
+                            controller.selectedFileName.value.isEmpty
+                                ? "Upload Photo/Document (Max 25MB)"
+                                : controller.selectedFileName.value,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-
-            // Display selected file
-            if (controller.selectedFile.value != null)
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
+              const SizedBox(height: 20),
+              TextField(
+                controller: controller.passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        controller.fileName.value,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                        overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: controller.confirmPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "Confirm Password",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+              const SizedBox(height: 30),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: controller.registerUser,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF683091),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                  ),
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Already have an account?"),
+                  TextButton(
+                    onPressed: () {
+                      Get.offAll(() => const LoginScreen());
+                    },
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(
+                        color: Color(0xFF683091),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: controller.removeFile,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-            const SizedBox(height: 20),
-
-            // Sign Up Button
-            controller.isLoading.value
-                ? const CircularProgressIndicator()
-                : SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF683091),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                ),
-                onPressed: controller.registerUser,
-                child: const Text("Sign Up", style: TextStyle(color: Colors.white, fontSize: 16)),
-              ),
-            ),
-
-            const SizedBox(height: 10),
-            TextButton(
-              onPressed: () {
-                Get.to(() => LoginScreen());
-              },
-              child: const Text("Already have an account? Log In"),
-            ),
-          ],
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
 
 class AuthController extends GetxController {
-  var isLoading = false.obs;
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController provinceController = TextEditingController();
 
-  final fullNameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  var selectedRole = ''.obs;
-
-  var selectedFile = Rxn<File>();
-  var fileName = ''.obs;
+  RxString selectedRole = ''.obs;
+  RxString selectedGender = ''.obs;
+  Rx<File?> selectedFile = Rx<File?>(null);
+  RxString selectedFileName = ''.obs;
+  RxBool isLoading = false.obs;
 
   void setSelectedFile(File file, String name) {
     selectedFile.value = file;
-    fileName.value = name;
-    print("Selected file: $name");
+    selectedFileName.value = name;
   }
 
-  void removeFile() {
-    selectedFile.value = null;
-    fileName.value = '';
-    print("File removed");
+  void setSelectedRole(String role) {
+    selectedRole.value = role;
   }
 
-  void registerUser() async {
+  void setSelectedGender(String gender) {
+    selectedGender.value = gender;
+  }
+
+  Future<void> registerUser() async {
+    // Client-side validation
     if (fullNameController.text.isEmpty ||
         emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
-        selectedRole.value.isEmpty) {
-      Get.snackbar("Error", "All fields are required");
+        confirmPasswordController.text.isEmpty ||
+        phoneNumberController.text.isEmpty ||
+        cityController.text.isEmpty ||
+        provinceController.text.isEmpty ||
+        selectedRole.value.isEmpty ||
+        selectedGender.value.isEmpty) {
+      Get.snackbar("Error", "Please fill in all required fields.");
+      return;
+    }
+
+    if (!GetUtils.isEmail(emailController.text)) {
+      Get.snackbar("Error", "Please enter a valid email address.");
+      return;
+    }
+
+    if (passwordController.text != confirmPasswordController.text) {
+      Get.snackbar("Error", "Passwords do not match.");
       return;
     }
 
     isLoading.value = true;
 
-    final response = await ApiService.register(
-      name: fullNameController.text,
-      email: emailController.text,
-      password: passwordController.text,
-      role: "role",
-      phone: "",
-      password2: "",
-      city: "",
-      province: "",
-      gender: "",
-      photoDocument: "file", userId: ''
-    );
+    try {
+      final response = await ApiService.register(
+        name: fullNameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        password2: confirmPasswordController.text,
+        role: selectedRole.value,
+        photoDocument: selectedFile.value,
+        phone: phoneNumberController.text,
+        city: cityController.text,
+        province: provinceController.text,
+        gender: selectedGender.value,
+      );
 
-    isLoading.value = false;
+      isLoading.value = false;
 
-    print("Register API response: $response");
-
-    if (response['status'] == 200) {
-      Get.snackbar("Success", "Account created successfully");
-      Get.to(() => LoginScreen());
-    } else {
-      final errorMessage = response['data']?['message'] ?? response['error'] ?? "Registration failed";
-      Get.snackbar("Error", errorMessage);
+      if (response['status'] == 200 || response['status'] == 201) {
+        Get.snackbar("Success", "Account created successfully");
+        Get.offAll(() => LoginScreen());
+      } else {
+        // Handle specific error messages from the backend
+        String errorMessage = response['error'] ?? "Registration failed. Please try again.";
+        if (response['data'] != null && response['data'] is Map) {
+          // Iterate over errors if the backend sends multiple field errors
+          if (response['data'].containsKey('email') && response['data']['email'] is List) {
+            errorMessage = response['data']['email'][0];
+          } else if (response['data'].containsKey('password') && response['data']['password'] is List) {
+            errorMessage = response['data']['password'][0];
+          } else if (response['data'].containsKey('detail')) {
+            errorMessage = response['data']['detail'];
+          } else if (response['data'].containsKey('message')) {
+            errorMessage = response['data']['message'];
+          } else {
+            // If the error data is a generic map, try to stringify it
+            errorMessage = response['data'].toString();
+          }
+        }
+        Get.snackbar("Error", errorMessage);
+      }
+    } catch (e) {
+      isLoading.value = false;
+      if (kDebugMode) {
+        print('Registration catch error: $e');
+      }
+      Get.snackbar("Error", "An error occurred: ${e.toString()}");
     }
   }
 
@@ -242,6 +351,10 @@ class AuthController extends GetxController {
     fullNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
+    phoneNumberController.dispose();
+    cityController.dispose();
+    provinceController.dispose();
     super.onClose();
   }
 }
