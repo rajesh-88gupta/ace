@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      DISABLE ALL NETWORK SECURITY: Allow cleartext (HTTP) and TLS (HTTPS) to ANY domain on ANY port.
+      This effectively turns off certificate/cleartext checks for development.
+    -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <!-- Trust system CA certificates -->
+            <certificates src="system" />
+            <!-- Trust user-added CA certificates (if any) -->
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

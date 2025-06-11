@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // Based on the image you sent, it's likely under result['data']['token']['access']
       await storage.write(
         key: 'auth_token',
-        value: result['data']['token']['access'],
+        value: result['data']['access'],
       );
 
       setState(() {
