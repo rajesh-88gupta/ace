@@ -74,7 +74,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 hint: const Text("Select Role"),
                 onChanged: (value) => controller.setSelectedRole(value!),
-                items: ['Student', 'Teacher', 'Admin'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+                items: ['Student', 'Instructor'].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
               ),
               const SizedBox(height: 20),
               GestureDetector(

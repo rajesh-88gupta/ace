@@ -3,7 +3,7 @@ import 'homescreen/DownlodNotesScreen.dart';
 import 'homescreen/JoinClassScreen.dart';
 import 'homescreen/AskDoubtsScreen.dart';
 import 'homescreen/courses_screen.dart'; // Import new screen
-import 'homescreen/category_screen.dart'; // Import new screen
+import 'homescreen/exam_screen.dart'; // Import new screen
 import 'homescreen/profile_screen.dart'; // Import new screen
 
 void main() {
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
     _pages = [
       _buildHomeContent(), // Your original home page content
       const CoursesScreen(),
-      const CategoryScreen(),
+      const ExamScreen(),
       const ProfileScreen(),
     ];
   }
@@ -1124,7 +1124,7 @@ class _HomePageState extends State<HomePage> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.category_outlined),
-          label: 'Category',
+          label: 'Exam',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
