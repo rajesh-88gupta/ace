@@ -39,7 +39,6 @@ dependencies:
   http: ^1.1.0
   provider: ^6.0.5
   flutter_secure_storage: ^9.2.4
-  flutter_zoom_sdk: ^1.1.0+4
   get: ^4.6.6
 
   shared_preferences: ^2.2.2
@@ -79,6 +78,7 @@ flutter:
     - assets/images/recom2.png
     - assets/images/classes1.png
     - assets/images/classes2.png
+    - assets/images/class_banner.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_sdk/zoom_options.dart';
-import 'package:flutter_zoom_sdk/zoom_view.dart';
 
 class JoinClassScreen extends StatefulWidget {
   const JoinClassScreen({super.key});
@@ -10,25 +8,25 @@ class JoinClassScreen extends StatefulWidget {
 }
 
 class _JoinClassScreenState extends State<JoinClassScreen> {
-  final ZoomOptions zoomOptions = ZoomOptions(
-    domain: "zoom.us",
-    appKey: "YOUR_ZOOM_SDK_KEY",       // 🔑 Replace with your SDK Key
-    appSecret: "YOUR_ZOOM_SDK_SECRET", // 🔐 Replace with your SDK Secret
-  );
-
-  final ZoomMeetingOptions meetingOptions = ZoomMeetingOptions(
-    userId: "student@example.com",
-    displayName: "Student User",
-    meetingId: "MEETING_ID",           // Replace with your actual meeting ID
-    meetingPassword: "PASSWORD",       // Replace with your actual meeting password
-  );
-
-  void _joinZoomMeeting() async {
-    await ZoomView().initZoom(zoomOptions);
-    ZoomView().joinMeeting(meetingOptions).then((result) {
-      debugPrint("Zoom join result: $result");
-    });
-  }
+  // final ZoomOptions zoomOptions = ZoomOptions(
+  //   domain: "zoom.us",
+  //   appKey: "YOUR_ZOOM_SDK_KEY",       // 🔑 Replace with your SDK Key
+  //   appSecret: "YOUR_ZOOM_SDK_SECRET", // 🔐 Replace with your SDK Secret
+  // );
+  //
+  // final ZoomMeetingOptions meetingOptions = ZoomMeetingOptions(
+  //   userId: "student@example.com",
+  //   displayName: "Student User",
+  //   meetingId: "MEETING_ID",           // Replace with your actual meeting ID
+  //   meetingPassword: "PASSWORD",       // Replace with your actual meeting password
+  // );
+  //
+  // void _joinZoomMeeting() async {
+  //   await ZoomView().initZoom(zoomOptions);
+  //   ZoomView().joinMeeting(meetingOptions).then((result) {
+  //     debugPrint("Zoom join result: $result");
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +69,7 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
                           topRight: Radius.circular(12),
                         ),
                         child: Image.asset(
-                          'assets/images/class_banner.jpg',
+                          'assets/images/class_banner.png',
                           width: double.infinity,
                           height: 180,
                           fit: BoxFit.cover,
@@ -140,16 +138,16 @@ class _JoinClassScreenState extends State<JoinClassScreen> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: _joinZoomMeeting,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF683091),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+                onPressed: () {  },
                 child: const Text(
                   "Join Classes",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16,color: Colors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             )

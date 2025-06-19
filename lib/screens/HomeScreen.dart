@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
       home: const HomePage(),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/download-notes': (context) => const DownloadNotesScreen(),
+        '/download-notes': (context) => DownloadNotesScreen(),
         '/joinClass': (context) => const JoinClassScreen(),
         '/askDoubts': (context) => const AskDoubtsScreen(),
       },
