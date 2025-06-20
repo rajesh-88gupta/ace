@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-// This is your ProfileModal widget, unchanged except for the borderRadius
+// ProfileModal widget with right-to-left transition and custom logout popup
 class ProfileModal extends StatelessWidget {
   const ProfileModal({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // for overlay effect if needed
+      backgroundColor: Colors.transparent,
       body: Align(
         alignment: Alignment.centerLeft,
         child: Container(
@@ -68,7 +68,7 @@ class ProfileModal extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               _buildMenuItem(context, Icons.account_circle_outlined, 'My Account', onTap: () {
-                Navigator.pop(context); // Close modal
+                Navigator.pop(context);
                 Navigator.pushNamed(context, '/profileScreen');
               }),
               _buildMenuItem(context, Icons.school_outlined, 'My Classes'),
@@ -78,7 +78,15 @@ class ProfileModal extends StatelessWidget {
               _buildMenuItem(context, Icons.note_outlined, 'My Notes'),
               _buildMenuItem(context, Icons.schedule_outlined, 'Reschedule or Cancel Class'),
               const Divider(height: 30),
-              _buildMenuItem(context, Icons.logout, 'Logout', color: Colors.red),
+              _buildMenuItem(
+                context,
+                Icons.logout,
+                'Logout',
+                color: Colors.red,
+                onTap: () {
+                  _showLogoutDialog(context);
+                },
+              ),
             ],
           ),
         ),
@@ -86,8 +94,13 @@ class ProfileModal extends StatelessWidget {
     );
   }
 
-  static Widget _buildMenuItem(BuildContext context, IconData icon, String text,
-      {Color color = Colors.black, VoidCallback? onTap}) {
+  static Widget _buildMenuItem(
+      BuildContext context,
+      IconData icon,
+      String text, {
+        Color color = Colors.black,
+        VoidCallback? onTap,
+      }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: InkWell(
@@ -103,7 +116,103 @@ class ProfileModal extends StatelessWidget {
                 color: color,
               ),
             ),
+            const Spacer(),
+            if (icon != Icons.logout)
+              const Icon(Icons.chevron_right, color: Colors.grey),
           ],
+        ),
+      ),
+    );
+  }
+
+  // Logout dialog styled for modern look
+  static Future<void> _showLogoutDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.35),
+      builder: (context) => Center(
+        child: AlertDialog(
+          elevation: 16, // Strong shadow for floating effect
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28), // Smooth, large corners
+          ),
+          backgroundColor: Colors.white,
+          contentPadding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Log out ?',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Are You Sure Want To Log Out',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.grey,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 28),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFF0F1F9),
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF6C3EFF),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        elevation: 2,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () {
+                        // Add your logout logic here
+                        Navigator.of(context).pop(); // close dialog
+                        Navigator.of(context).pop(); // close profile modal
+                      },
+                      child: const Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -136,30 +245,3 @@ void showProfileModal(BuildContext context) {
 }
 
 // Example main app for testing
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/profileScreen': (_) => const Scaffold(
-          body: Center(child: Text('Profile Screen')),
-        ),
-      },
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Demo App')),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () => showProfileModal(context),
-            child: const Text('Open Profile Modal'),
-          ),
-        ),
-      ),
-    );
-  }
-}

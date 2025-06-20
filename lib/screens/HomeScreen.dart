@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'homescreen/DownlodNotesScreen.dart';
+import 'notes//DownlodNotesScreen.dart';
 import 'homescreen/JoinClassScreen.dart';
 import 'homescreen/AskDoubtsScreen.dart';
-import 'homescreen/courses_screen.dart';
 import 'homescreen/exam_screen.dart';
 import 'profile_modal.dart';
-import 'homescreen/profile_screen.dart'; // Import the ProfileScreen file
+import 'users/profile_screen.dart'; // Import the ProfileScreen file
 
 void main() {
   runApp(const HomeScreen());
@@ -14,7 +13,7 @@ void main() {
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dental Courses',
@@ -130,7 +129,7 @@ class _HomePageState extends State<HomePage> {
 
     _pages = [
       _buildHomeContent(), // Index 0
-      const CoursesScreen(),    // Index 1
+        // Index 1
       const ExamScreen(),     // Index 2
     ];
   }
