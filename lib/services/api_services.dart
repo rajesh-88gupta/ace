@@ -5,70 +5,7 @@ import 'package:ace/utils/api_constants.dart';
 import 'package:flutter/foundation.dart'; // Import for kDebugMode
 
 class ApiService {
-  // Register a new user with file upload
-  // static Future<Map<String, dynamic>> register({
-  //     required String name,
-  //     required String email,
-  //     required String password,
-  //     required String role,
-  //     File? photoDocument,
-  //     required String password2,
-  //     required String userId,
-  //     required String phone,
-  //     required String city,
-  //     required String province,
-  //     required String gender,
-  //   }) async {
-  //     try {
-  //       var request = http.MultipartRequest('POST', Uri.parse(ApiConstants.register));
-  //
-  //       // Attach file if available
-  //       if (photoDocument != null) {
-  //         request.files.add(await http.MultipartFile.fromPath(
-  //           'photo_document',
-  //           photoDocument.path,
-  //         ));
-  //       }
-  //
-  //       request.fields.addAll({
-  //         "user_id": userId,
-  //         "email": email,
-  //         "name": name,
-  //         "role": role.toLowerCase(),
-  //         "password": password,
-  //         "password2": password2,
-  //         "phone": phone,
-  //         "city": city,
-  //         "province": province,
-  //         "gender": gender.toLowerCase(),
-  //       });
-  //
-  //       final streamedResponse = await request.send();
-  //       final responseBody = await streamedResponse.stream.bytesToString();
-  //       final response = http.Response(
-  //         responseBody,
-  //         streamedResponse.statusCode,
-  //         headers: streamedResponse.headers,
-  //       );
-  //
-  //       if (kDebugMode) {
-  //         print("Status Code: ${response.statusCode}");
-  //         print("Response Body: ${response.body}");
-  //       }
-  //
-  //       final data = jsonDecode(response.body);
-  //
-  //       return {
-  //         'status': response.statusCode,
-  //         'data': data,
-  //       };
-  //     } catch (e) {
-  //       return {
-  //         'status': 500,
-  //         'error': 'Unexpected error occurred: $e',
-  //       };
-  //     }
-  //   }
+
   static Future<Map<String, dynamic>> register({
     required String name,
     required String email,

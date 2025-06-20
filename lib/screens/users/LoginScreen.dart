@@ -1,6 +1,6 @@
 import 'package:ace/screens/HomeScreen.dart';
 import 'package:ace/screens/ResetPassword.dart';
-import 'package:ace/screens/SignupScreen.dart';
+import 'package:ace/screens/users/SignupScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';

@@ -1,4 +1,4 @@
-import 'package:ace/screens/homescreen/NoteDetailSheet.dart';
+import 'package:ace/screens/notes/NoteDetailSheet.dart';
 import 'package:flutter/material.dart';
 
 class DownloadNotesScreen extends StatefulWidget {
