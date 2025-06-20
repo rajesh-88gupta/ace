@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'notes/DownlodNotesScreen.dart';
 import 'homescreen/JoinClassScreen.dart';
 import 'homescreen/AskDoubtsScreen.dart';
-import 'homescreen/courses_screen.dart'; // Import new screen
-import 'homescreen/exam_screen.dart'; // Import new screen
 import 'users/profile_screen.dart'; // Import new screen
 
 void main() {
