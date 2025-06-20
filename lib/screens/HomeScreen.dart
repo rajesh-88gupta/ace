@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'homescreen/DownlodNotesScreen.dart';
 import 'homescreen/JoinClassScreen.dart';
 import 'homescreen/AskDoubtsScreen.dart';
-import 'homescreen/courses_screen.dart'; // Import new screen
-import 'homescreen/exam_screen.dart'; // Import new screen
-import 'homescreen/profile_screen.dart'; // Import new screen
+import 'homescreen/courses_screen.dart';
+import 'homescreen/exam_screen.dart';
+import 'profile_modal.dart';
+import 'homescreen/profile_screen.dart'; // Import the ProfileScreen file
 
 void main() {
   runApp(const HomeScreen());
@@ -30,6 +31,7 @@ class HomeScreen extends StatelessWidget {
         '/download-notes': (context) => DownloadNotesScreen(),
         '/joinClass': (context) => const JoinClassScreen(),
         '/askDoubts': (context) => const AskDoubtsScreen(),
+        '/profileScreen': (context) => const ProfileScreen(), // Add the route for ProfileScreen
       },
     );
   }
@@ -119,7 +121,6 @@ class _HomePageState extends State<HomePage> {
   late List<ClassCardModel> classes;
   List<Batchmate> batchmates = [];
 
-  // List of widgets to display in the body
   late final List<Widget> _pages;
 
   @override
@@ -127,14 +128,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadData();
 
-    // Initialize the pages list
     _pages = [
-      _buildHomeContent(), // Your original home page content
-      const CoursesScreen(),
-      const ExamScreen(),
-      const ProfileScreen(),
+      _buildHomeContent(), // Index 0
+      const CoursesScreen(),    // Index 1
+      const ExamScreen(),     // Index 2
     ];
   }
+
 
   void _loadData() {
     quickActions = [
@@ -254,7 +254,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // The body now shows the currently selected page
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
@@ -263,7 +262,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Extracted the home page content into its own method for clarity
   Widget _buildHomeContent() {
     return SafeArea(
       child: SingleChildScrollView(
@@ -303,11 +301,22 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 23,
-            backgroundColor: Colors.grey.shade300,
-            backgroundImage: const NetworkImage(
-              "https://randomuser.me/api/portraits/men/32.jpg",
+          // MODIFICATION IS HERE
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => const ProfileModal(),
+              );
+            },
+            child: CircleAvatar(
+              radius: 23,
+              backgroundColor: Colors.grey.shade300,
+              backgroundImage: const NetworkImage(
+                "https://randomuser.me/api/portraits/men/32.jpg",
+              ),
             ),
           ),
           const SizedBox(width: 12),
@@ -356,8 +365,8 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           color: const Color(0xFF7B2FF2),
           borderRadius: BorderRadius.circular(20),
-          image: DecorationImage(
-            image: AssetImage('assets/images/banner_bg.png'), // Add your banner image
+          image: const DecorationImage(
+            image: AssetImage('assets/images/banner_bg.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -543,7 +552,7 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           final course = recommendedCourses[index];
           return Container(
-            width: MediaQuery.of(context).size.width * 0.76, // Wider card
+            width: MediaQuery.of(context).size.width * 0.76,
             margin: EdgeInsets.only(right: index == recommendedCourses.length - 1 ? 0 : 18),
             child: _buildRecommendedCard(
               imageAsset: course.imageAsset,
@@ -589,7 +598,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Bigger image
             Container(
               height: 120,
               width: double.infinity,
@@ -738,7 +746,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Class image with live indicator
             Stack(
               children: [
                 Container(
@@ -916,7 +923,7 @@ class _HomePageState extends State<HomePage> {
             totalSteps: 7,
             desc: "The Assessment of Fundamental Knowledge (AFK) is the first step for internationally trained dentists...",
           ),
-          const SizedBox(height: 18), // More spacing between cards
+          const SizedBox(height: 18),
           _buildUpcomingTaskCard(
             title: "Mock Exams (Onsite) & Discussions",
             date: "10 Apr 2025",
@@ -1104,9 +1111,14 @@ class _HomePageState extends State<HomePage> {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
       onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
+        if (index == 3) {
+          // Navigate to ProfileScreen using the defined route
+          Navigator.pushNamed(context, '/profileScreen');
+        } else {
+          setState(() {
+            _currentIndex = index;
+          });
+        }
       },
       type: BottomNavigationBarType.fixed,
       selectedItemColor: const Color(0xFF7B2FF2),
