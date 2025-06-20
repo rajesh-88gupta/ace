@@ -1,10 +1,12 @@
+import 'package:ace/screens/course/MyCoursesListScreen.dart';
+import 'package:ace/screens/homescreen/QuizAttemptScreen.dart';
 import 'package:flutter/material.dart';
-import 'homescreen/DownlodNotesScreen.dart';
+import 'notes/DownlodNotesScreen.dart';
 import 'homescreen/JoinClassScreen.dart';
 import 'homescreen/AskDoubtsScreen.dart';
 import 'homescreen/courses_screen.dart'; // Import new screen
 import 'homescreen/exam_screen.dart'; // Import new screen
-import 'homescreen/profile_screen.dart'; // Import new screen
+import 'users/profile_screen.dart'; // Import new screen
 
 void main() {
   runApp(const HomeScreen());
@@ -130,8 +132,8 @@ class _HomePageState extends State<HomePage> {
     // Initialize the pages list
     _pages = [
       _buildHomeContent(), // Your original home page content
-      const CoursesScreen(),
-      const ExamScreen(),
+      MyCoursesListScreen(),
+      const QuizAttemptScreen(),
       const ProfileScreen(),
     ];
   }

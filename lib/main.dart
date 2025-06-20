@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ace/screens/LoginScreen.dart';
+import 'package:ace/screens/users/LoginScreen.dart';
 import 'package:ace/screens/HomeScreen.dart';
 import 'package:ace/utils/color.dart';
 import 'package:flutter/material.dart';

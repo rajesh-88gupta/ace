@@ -3,7 +3,7 @@ import 'package:ace/controllers/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
-import '../services/api_services.dart';
+import '../../services/api_services.dart';
 import 'LoginScreen.dart';
 import 'package:flutter/foundation.dart'; // Import for kDebugMode
 class SignUpScreen extends StatelessWidget {
