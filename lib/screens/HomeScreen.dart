@@ -1,11 +1,13 @@
+import 'package:ace/screens/course/MyCoursesListScreen.dart';
+import 'package:ace/screens/homescreen/QuizAttemptScreen.dart';
+import 'package:ace/screens/notes/DownlodNotesScreen.dart';
+import 'package:ace/screens/users/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'homescreen/DownlodNotesScreen.dart';
 import 'homescreen/JoinClassScreen.dart';
 import 'homescreen/AskDoubtsScreen.dart';
-import 'homescreen/courses_screen.dart';
+import 'homescreen/exam_screen.dart'; // Import new screen
 import 'homescreen/exam_screen.dart';
 import 'profile_modal.dart';
-import 'homescreen/profile_screen.dart'; // Import the ProfileScreen file
 
 void main() {
   runApp(const HomeScreen());
@@ -130,8 +132,9 @@ class _HomePageState extends State<HomePage> {
 
     _pages = [
       _buildHomeContent(), // Index 0
-      const CoursesScreen(),    // Index 1
-      const ExamScreen(),     // Index 2
+       MyCoursesListScreen(),    // Index 1
+       QuizAttemptScreen(),
+       ProfileScreen()// Index 2
     ];
   }
 
