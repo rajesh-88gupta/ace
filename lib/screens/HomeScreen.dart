@@ -5,8 +5,7 @@ import 'package:ace/screens/users/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'homescreen/JoinClassScreen.dart';
 import 'homescreen/AskDoubtsScreen.dart';
-import 'homescreen/exam_screen.dart'; // Import new screen
-import 'homescreen/exam_screen.dart';
+
 import 'profile_modal.dart';
 
 void main() {
