@@ -6,4 +6,5 @@ class ApiConstants {
   static const String login = '$baseUrl/login/';
   static const String logout = '$baseUrl/logout/';
   static const String resendVerification = '$baseUrl/resend-verification';
+  static const String getProfile = '$baseUrl/profile/';
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ace/services/api_services.dart';
+import 'package:ace/screens/users/LoginScreen.dart';
+import 'package:get/get.dart';
 
-// ProfileModal widget with right-to-left transition and custom logout popup
 class ProfileModal extends StatelessWidget {
   const ProfileModal({super.key});
 
@@ -125,17 +128,18 @@ class ProfileModal extends StatelessWidget {
     );
   }
 
-  // Logout dialog styled for modern look
   static Future<void> _showLogoutDialog(BuildContext context) async {
+    final storage = const FlutterSecureStorage();
+
     await showDialog(
       context: context,
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.35),
       builder: (context) => Center(
         child: AlertDialog(
-          elevation: 16, // Strong shadow for floating effect
+          elevation: 16,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28), // Smooth, large corners
+            borderRadius: BorderRadius.circular(28),
           ),
           backgroundColor: Colors.white,
           contentPadding: const EdgeInsets.fromLTRB(24, 32, 24, 24),
@@ -195,10 +199,38 @@ class ProfileModal extends StatelessWidget {
                         elevation: 2,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      onPressed: () {
-                        // Add your logout logic here
-                        Navigator.of(context).pop(); // close dialog
-                        Navigator.of(context).pop(); // close profile modal
+                      onPressed: () async {
+                        // Get the refresh token from secure storage
+                        final refreshToken = await storage.read(key: 'refresh_token');
+
+                        if (refreshToken != null) {
+                          // Call the logout API
+                          final result = await ApiService.logout(refreshToken);
+
+                          if (result['status'] == 200) {
+                            // Clear all stored tokens
+                            await storage.delete(key: 'auth_token');
+                            await storage.delete(key: 'refresh_token');
+
+                            // Navigate to login screen
+                            Navigator.of(context).pop(); // close dialog
+                            Navigator.of(context).pop(); // close profile modal
+                            Get.offAll(() => const LoginScreen());
+                          } else {
+                            // Show error message if logout failed
+                            final errorMessage = result['data']?['message'] ??
+                                result['error'] ?? 'Logout failed.';
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(errorMessage)),
+                            );
+                          }
+                        } else {
+                          // If no refresh token, just clear storage and navigate
+                          await storage.delete(key: 'auth_token');
+                          Navigator.of(context).pop(); // close dialog
+                          Navigator.of(context).pop(); // close profile modal
+                          Get.offAll(() => const LoginScreen());
+                        }
                       },
                       child: const Text(
                         'Logout',
@@ -219,7 +251,6 @@ class ProfileModal extends StatelessWidget {
   }
 }
 
-// Custom route for right-to-left animation
 class RightToLeftRoute extends PageRouteBuilder {
   final Widget child;
   RightToLeftRoute({required this.child})
@@ -239,9 +270,6 @@ class RightToLeftRoute extends PageRouteBuilder {
   );
 }
 
-// Usage: call this to open the profile modal from right to left
 void showProfileModal(BuildContext context) {
   Navigator.of(context).push(RightToLeftRoute(child: const ProfileModal()));
 }
-
-// Example main app for testing
