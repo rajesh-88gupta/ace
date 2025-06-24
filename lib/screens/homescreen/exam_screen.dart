@@ -24,6 +24,14 @@ class _ExamScreenState extends State<ExamScreen> {
       questionText: 'Who developed Flutter?',
       options: ['Apple', 'Google', 'Facebook', 'Microsoft'],
     ),
+    Question(
+      questionText: 'Who developed SQL?',
+      options: ['Apple', 'Google', 'Facebook', 'Oracle'],
+    ),
+    Question(
+      questionText: 'Who developed Python?',
+      options: ['TCS', 'IBM', 'Python Software Foundation', 'Microsoft'],
+    ),
   ];
 
   // final List<Question> questions = sampleQuestions;

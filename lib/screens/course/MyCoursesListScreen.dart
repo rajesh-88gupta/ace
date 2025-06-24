@@ -139,7 +139,10 @@ class MyCoursesListScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () {
                         // Navigate to course detail
-                        DynamicLessonScreen();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const DynamicLessonScreen()),
+                        );
                       },
                       child: const Text(
                         "View Details",
@@ -149,6 +152,7 @@ class MyCoursesListScreen extends StatelessWidget {
                         ),
                       ),
                     )
+
                   ],
                 )
               ],

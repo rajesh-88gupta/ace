@@ -1,4 +1,5 @@
 import 'package:ace/screens/course/MyCoursesListScreen.dart';
+import 'package:ace/screens/homescreen/CalendarScreen.dart';
 import 'package:ace/screens/homescreen/QuizAttemptScreen.dart';
 import 'package:ace/screens/notes/DownlodNotesScreen.dart';
 import 'package:ace/screens/users/profile_screen.dart';
@@ -530,7 +531,12 @@ class _HomePageState extends State<HomePage> {
           const Spacer(),
           if (showViewMore)
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CalendarScreen()),
+                );
+              },
               style: TextButton.styleFrom(
                 foregroundColor: const Color(0xFF7B2FF2),
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),

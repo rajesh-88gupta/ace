@@ -80,6 +80,10 @@ flutter:
     - assets/images/classes1.png
     - assets/images/classes2.png
     - assets/images/class_banner.png
+    - assets/images/judgement.jpg
+    - assets/images/clinical.jpg
+    - assets/images/dental.jpg
+    - assets/images/veneer_banner.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

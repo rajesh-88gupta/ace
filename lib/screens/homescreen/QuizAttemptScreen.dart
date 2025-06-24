@@ -90,8 +90,10 @@ class QuizAttemptScreen extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  // Add navigation or logic to start the test
-                  ExamScreen();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ExamScreen()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF683091),
@@ -109,6 +111,7 @@ class QuizAttemptScreen extends StatelessWidget {
                 ),
               ),
             ),
+
           ],
         ),
       ),
